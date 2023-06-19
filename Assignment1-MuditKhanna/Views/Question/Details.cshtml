@@ -1,0 +1,24 @@
+﻿@model Assignment1_MuditKhanna.Models.QuestionModel
+
+<h1>@Html.DisplayFor(Model=>Model.QuestionValue)</h1>
+
+<h4>Answers: </h4>
+
+<ul class="list-group">
+    @if (Model.AnswersList.Count == 0)
+    {
+        <h3>No Answers available</h3>
+    }
+    else
+    {
+        @foreach (var answer in Model.AnswersList)
+        {
+            <li class="list-group-item">@Html.DisplayFor(_=>answer.AnswerValue)</li>
+        }
+    }
+
+</ul>
+
+<form>
+
+</form>

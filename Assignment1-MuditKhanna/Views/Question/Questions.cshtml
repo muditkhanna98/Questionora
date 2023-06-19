@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Assignment1_MuditKhanna.Models.QuestionModel>
+
+<h2>Questions</h2>
+
+@foreach (var question in Model)
+{
+    <div class="card mb-4">
+        <a asp-controller="Question" asp-action="Details" asp-route-id="@question.Id"
+           class="card-body" style="text-decoration:none; color:black">
+            <h5 class="card-title">
+                @Html.DisplayFor(_=>question.QuestionValue)
+                <span class="m-2 badge rounded-pill bg-@(question.Category=="Personal"?"danger"
+                :"info")"> @Html.DisplayFor(_=>question.Category)</span>
+            </h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Answers: @Html.DisplayFor(_=>question.AnswersList.Count)</h6>
+        </a>
+    </div>
+}
+
+<form asp-action="PostQuestion">
+    <div class="form-group mb-2">
+        <label name="CategoryName">Category</label>
+        <select class="form-select" name="Category" asp-items="ViewBag.CategoryNames"></select>
+    </div>
+    <textarea class="form-control" rows="4" placeholder="Type question here" name="QuestionValue"></textarea>
+    <button class="btn btn-danger mt-2" type="submit" value="Ask">Ask</button>
+</form>
