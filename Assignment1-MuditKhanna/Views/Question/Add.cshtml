@@ -1,0 +1,31 @@
+﻿@model Assignment1_MuditKhanna.Models.QuestionModel
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Questions">Questions</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Ask a question</li>
+    </ol>
+</nav>
+<h2>Questions</h2>
+
+<form asp-action="PostQuestion">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+    </div>
+    <div class="form-group mb-2">
+        <label name="CategoryName">Category</label>
+        <select class="form-select" name="Category" asp-items="ViewBag.CategoryNames"></select>
+    </div>
+    <textarea class="form-control" rows="4" placeholder="Type question here" name="QuestionValue" asp-for="QuestionValue"></textarea>
+    <span asp-validation-for="QuestionValue" class="text-danger"></span>
+    <div>
+        <button class="btn btn-primary mt-2" type="submit" value="Ask">Ask</button>
+    </div>
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

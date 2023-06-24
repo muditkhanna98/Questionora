@@ -1,0 +1,34 @@
+﻿@model Assignment1_MuditKhanna.Models.AnswerModel
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Questions">Questions List</a></li>
+        <li class="breadcrumb-item">
+            <a asp-controller="Question" asp-action="Details"
+               asp-route-id="@ViewBag.ques.Id">Question @ViewBag.ques.Id</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Add Answer</li>
+    </ol>
+</nav>
+<h1>@ViewBag.ques.QuestionValue</h1>
+
+<form asp-controller="Answer" asp-action="Add">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+    <div class="form-group">
+        <label asp-for="QuestionId" class="form-label"></label>
+        <input asp-for="QuestionId" value="@ViewBag.ques.Id" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="AnswerValue" class="form-label"></label>
+        <textarea rows="4" class="form-control" asp-for="@Model.AnswerValue"></textarea>
+        <span asp-validation-for="AnswerValue" class="text-danger"></span>
+    </div>
+    <button class="btn btn-primary mt-4" type="submit">Add Answer</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

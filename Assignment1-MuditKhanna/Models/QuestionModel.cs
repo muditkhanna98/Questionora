@@ -1,10 +1,15 @@
-﻿namespace Assignment1_MuditKhanna.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Assignment1_MuditKhanna.Models
 {
     public class QuestionModel
     {
         public int Id { get; set; }
 
+        [Required]
         public string Category { get; set; }
+
+        [Required]
         public string QuestionValue { get; set; }
         public List<AnswerModel> AnswersList { get; set; } = new List<AnswerModel>();
 

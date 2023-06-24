@@ -1,27 +1,35 @@
 ﻿@model IEnumerable<Assignment1_MuditKhanna.Models.QuestionModel>
 
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Questions List</li>
+    </ol>
+</nav>
 <h2>Questions</h2>
 
 @foreach (var question in Model)
 {
-    <div class="card mb-4">
-        <a asp-controller="Question" asp-action="Details" asp-route-id="@question.Id"
-           class="card-body" style="text-decoration:none; color:black">
-            <h5 class="card-title">
-                @Html.DisplayFor(_=>question.QuestionValue)
-                <span class="m-2 badge rounded-pill bg-@(question.Category=="Personal"?"danger"
-                :"info")"> @Html.DisplayFor(_=>question.Category)</span>
-            </h5>
+    <div class="card mb-4 mt-2" style="border-radius:1rem">
+        <div class="card-body" style="text-decoration:none; color:black">
+            <div style="display:flex; justify-content:space-between">
+                <h5 class="card-title">
+                    @Html.DisplayFor(_=>question.QuestionValue)
+                    <span class="m-2 badge rounded-pill bg-@(question.Category=="Information Technology"?"danger"
+                    :(question.Category=="General Knowledge"?"success":"info"))"> @Html.DisplayFor(_=>question.Category)</span>
+                </h5>
+                <div>
+                    <a class="btn btn-primary" asp-controller="Question" asp-action="Details"
+                       asp-route-id="@question.Id" style="height:2.5rem">View</a>
+                    <a class="btn btn-danger" style="height:2.5rem"
+                       asp-controller="Question" asp-action="Delete" asp-route-id="@question.Id">
+                        Delete
+                    </a>
+                </div>
+            </div>
             <h6 class="card-subtitle mb-2 text-body-secondary">Answers: @Html.DisplayFor(_=>question.AnswersList.Count)</h6>
-        </a>
+        </div>
     </div>
 }
 
-<form asp-action="PostQuestion">
-    <div class="form-group mb-2">
-        <label name="CategoryName">Category</label>
-        <select class="form-select" name="Category" asp-items="ViewBag.CategoryNames"></select>
-    </div>
-    <textarea class="form-control" rows="4" placeholder="Type question here" name="QuestionValue"></textarea>
-    <button class="btn btn-danger mt-2" type="submit" value="Ask">Ask</button>
-</form>
+<a asp-controller="Question" asp-action="Add" class="btn btn-primary">Ask a question</a>

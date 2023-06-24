@@ -1,24 +1,49 @@
 ﻿@model Assignment1_MuditKhanna.Models.QuestionModel
 
-<h1>@Html.DisplayFor(Model=>Model.QuestionValue)</h1>
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Questions">Questions List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Question @Html.DisplayFor(Model=>Model.Id)</li>
+    </ol>
+</nav>
 
-<h4>Answers: </h4>
+<h2>
+    @Html.DisplayFor(Model=>Model.QuestionValue)
+    <span class="m-2 badge rounded-pill bg-@(Model.Category=="Information Technology"?"danger"
+                    :(Model.Category=="General Knowledge"?"success":"info"))"> @Html.DisplayFor(_=>Model.Category)</span>
+</h2>
+
 
 <ul class="list-group">
     @if (Model.AnswersList.Count == 0)
     {
-        <h3>No Answers available</h3>
+        <div class="alert alert-danger" role="alert">
+            No Answers Available yet. Add one below.
+        </div>
     }
     else
     {
+        <h5>Answers: </h5>
         @foreach (var answer in Model.AnswersList)
         {
-            <li class="list-group-item">@Html.DisplayFor(_=>answer.AnswerValue)</li>
+            <li class="list-group-item">
+                <div style="display:flex;justify-content:space-between;">
+                    <p>
+                        @Html.DisplayFor(_=>answer.AnswerValue)
+                    </p>
+                    <div>
+                        <a asp-controller="Answer" asp-action="Edit" asp-route-id="@answer.Id" asp-route-quesId="@Model.Id"
+                           class="btn btn-primary">Edit</a>
+                        <a asp-controller="Answer" asp-action="Delete" asp-route-id="@answer.Id" asp-route-quesId="@Model.Id" 
+                           class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+                <h6>- @Html.DisplayFor(_=>answer.Author)</h6>
+            </li>
         }
     }
 
 </ul>
 
-<form>
-
-</form>
+<a class="btn btn-primary mt-4" asp-controller="Answer" asp-action="Add" asp-route-quesId="@Model.Id">Add Answer</a>

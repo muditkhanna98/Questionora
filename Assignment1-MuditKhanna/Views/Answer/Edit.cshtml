@@ -1,0 +1,37 @@
+﻿@model Assignment1_MuditKhanna.Models.AnswerModel
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Questions">Questions List</a></li>
+        <li class="breadcrumb-item active">
+            <a asp-controller="Question" asp-action="Details" asp-route-id="@Model.QuestionId">
+                Question @Html.DisplayFor(Model=>Model.QuestionId)
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Answer @Html.DisplayFor(Model=>Model.Id)</li>
+    </ol>
+</nav>
+
+<form asp-action="Edit">
+    <div class="card">
+        <div class="card-header">
+            <div class="alert alert-danger" role="alert">
+                Confirm Edit
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label asp-for="QuestionId" class="form-label"></label>
+                <input class="form-control" asp-for="QuestionId" value="@Model.QuestionId" readonly />
+            </div>
+            <div class="form-group">
+             <label asp-for="AnswerValue" class="form-label"></label>
+            <input class="form-control" asp-for="AnswerValue" value="@Model.AnswerValue" />
+            </div>
+            <h6 class="mt-4">- @Model.Author</h6>
+            <button type="submit" class="btn btn-danger mt-2" value="Edit">Edit</button>
+        </div>
+    </div>
+</form>
+
