@@ -4,6 +4,7 @@ namespace Assignment1_MuditKhanna.Models
 {
     public class QuestionModel
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]

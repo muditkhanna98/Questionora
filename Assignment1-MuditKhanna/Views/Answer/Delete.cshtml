@@ -5,8 +5,8 @@
         <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Index">Home</a></li>
         <li class="breadcrumb-item"><a asp-controller="Question" asp-action="Questions">Questions List</a></li>
         <li class="breadcrumb-item active">
-            <a asp-controller="Question" asp-action="Details" asp-route-id="@Model.QuestionId">
-                Question @Html.DisplayFor(Model=>Model.QuestionId)
+            <a asp-controller="Question" asp-action="Details" asp-route-id="@Model.QuestionModelId">
+                Question @Html.DisplayFor(Model=>Model.QuestionModelId)
             </a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">Answer @Html.DisplayFor(Model=>Model.Id)</li>
@@ -22,8 +22,8 @@
         </div>
         <div class="card-body">
             <div class="form-group">
-                <label asp-for="QuestionId" class="form-label"></label>
-                <input class="form-control" asp-for="QuestionId" value="@Model.QuestionId" readonly />
+                <label asp-for="QuestionModelId" class="form-label"></label>
+                <input class="form-control" asp-for="QuestionModelId" value="@Model.QuestionModelId" readonly />
             </div>
             <div class="form-group">
                 <label asp-for="AnswerValue" class="form-label"></label>

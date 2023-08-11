@@ -1,11 +1,20 @@
-﻿using Assignment1_MuditKhanna.Models;
+﻿using Assignment1_MuditKhanna.Data;
+using Assignment1_MuditKhanna.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assignment1_MuditKhanna.Controllers
 {
     public class AnswerController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public AnswerController(ApplicationDbContext context)
+        {
+            this._context = context;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -13,7 +22,7 @@ namespace Assignment1_MuditKhanna.Controllers
 
         public IActionResult Add(int quesId)
         {
-            QuestionModel question = DataHelper.getQuestionsList().First(x => x.Id == quesId);
+            QuestionModel question = _context.Questions.Find(quesId);
             ViewBag.ques = question;
             return View();
         }
@@ -21,44 +30,42 @@ namespace Assignment1_MuditKhanna.Controllers
         [HttpPost]
         public IActionResult Add(AnswerModel answerModel)
         {
-            QuestionModel question = DataHelper.getQuestionsList().First(x => x.Id == answerModel.QuestionId);
-            answerModel.Id = question.AnswersList.Count > 0 ? question.AnswersList.Max(x => x.Id) + 1 : 1;
             answerModel.Author = "Anonymous";
-            question.AnswersList.Add(answerModel);
-            return RedirectToAction("Details", "Question", question);
+            _context.Answers.Add(answerModel);
+            _context.SaveChanges();
+            QuestionModel question = _context.Questions.Find(answerModel.QuestionModelId);
+            return RedirectToAction("Details", "Question", new { id = question.Id });
         }
 
         public IActionResult Delete(int id, int quesId)
         {
-            QuestionModel question = DataHelper.getQuestionsList().First(x => x.Id == quesId);
-            AnswerModel answer = question.AnswersList.Find(x => x.Id == id);
+            AnswerModel answer = _context.Answers.FirstOrDefault(x => x.Id == id && x.QuestionModelId == quesId);
             return View(answer);
         }
 
         [HttpPost]
         public IActionResult Delete(AnswerModel answerModel)
         {
-            QuestionModel question = DataHelper.getQuestionsList().Find(x => x.Id == answerModel.QuestionId);
-            AnswerModel answer = question.AnswersList.Find(x => x.Id == answerModel.Id);
-            question.AnswersList.Remove(answer);
-
+            _context.Answers.Remove(answerModel);
+            _context.SaveChanges();
+            QuestionModel question = _context.Questions.Find(answerModel.QuestionModelId);
             return RedirectToAction("Details", "Question", new { id = question.Id });
         }
 
         public IActionResult Edit(int id, int quesId)
         {
-            QuestionModel question = DataHelper.getQuestionsList().First(x => x.Id == quesId);
-            AnswerModel answer = question.AnswersList.Find(x => x.Id == id);
+            AnswerModel answer = _context.Answers.FirstOrDefault(x => x.Id == id && x.QuestionModelId == quesId);
             return View(answer);
         }
 
         [HttpPost]
         public IActionResult Edit(AnswerModel answerModel)
         {
-            QuestionModel question = DataHelper.getQuestionsList().Find(x => x.Id == answerModel.QuestionId);
-            AnswerModel answer = question.AnswersList.Find(x => x.Id == answerModel.Id);
+            AnswerModel answer = _context.Answers.Find(answerModel.Id);
             answer.AnswerValue = answerModel.AnswerValue;
+            _context.SaveChanges();
 
+            QuestionModel question = _context.Questions.Find(answerModel.QuestionModelId);
             return RedirectToAction("Details", "Question", new { id = question.Id });
         }
     }

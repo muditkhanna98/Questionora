@@ -1,11 +1,20 @@
-﻿using Assignment1_MuditKhanna.Models;
+﻿using Assignment1_MuditKhanna.Data;
+using Assignment1_MuditKhanna.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assignment1_MuditKhanna.Controllers
 {
     public class QuestionController : Controller
     {
+        public readonly ApplicationDbContext _context;
+
+        public QuestionController(ApplicationDbContext context)
+        {
+            this._context = context;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -14,7 +23,7 @@ namespace Assignment1_MuditKhanna.Controllers
         public IActionResult Questions()
         {
             ViewBag.categoryNames = new SelectList(DataHelper.categories);
-            return View(DataHelper.getQuestionsList());
+            return View(_context.Questions.Include(q => q.AnswersList).ToList());
         }
 
         public IActionResult Add()
@@ -28,10 +37,10 @@ namespace Assignment1_MuditKhanna.Controllers
         {
             if (ModelState.IsValid)
             {
-                questionModel.Id = DataHelper.getQuestionsList().Count + 1;
-                DataHelper.getQuestionsList().Add(questionModel);
+                _context.Questions.Add(questionModel);
+                _context.SaveChanges();
                 ViewBag.CategoryNames = new SelectList(DataHelper.categories);
-                return RedirectToAction("Questions", new { questions = DataHelper.getQuestionsList() });
+                return RedirectToAction("Questions", new { questions = _context.Questions.ToList() });
             }
 
             ViewBag.CategoryNames = new SelectList(DataHelper.categories);
@@ -40,16 +49,19 @@ namespace Assignment1_MuditKhanna.Controllers
 
         public IActionResult Details(int id)
         {
-            QuestionModel questionForDetail = DataHelper.getQuestionsList().First(x => x.Id == id);
+            QuestionModel questionForDetail = _context.Questions
+                .Include(q => q.AnswersList)
+                .FirstOrDefault(q => q.Id == id);
             return View(questionForDetail);
         }
 
         public IActionResult Delete(int id)
         {
-            QuestionModel question = DataHelper.getQuestionsList().First(x => x.Id == id);
-            DataHelper.getQuestionsList().Remove(question);
+            QuestionModel questionForDelete = _context.Questions.Find(id);
+            _context.Questions.Remove(questionForDelete);
+            _context.SaveChanges();
             ViewBag.categoryNames = new SelectList(DataHelper.categories);
-            return View("Questions", DataHelper.getQuestionsList());
+            return View("Questions", _context.Questions.ToList());
         }
     }
 }

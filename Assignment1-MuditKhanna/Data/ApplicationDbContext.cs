@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Assignment1_MuditKhanna.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Assignment1_MuditKhanna.Data
@@ -9,5 +10,8 @@ namespace Assignment1_MuditKhanna.Data
             : base(options)
         {
         }
+
+        public DbSet<QuestionModel> Questions { get; set; }
+        public DbSet<AnswerModel> Answers { get; set; }
     }
 }
