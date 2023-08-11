@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Assignment1_MuditKhanna.Models.QuestionModel>
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<Assignment1_MuditKhanna.Models.QuestionModel>
+@inject UserManager<IdentityUser> UserManager
+
 
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -21,10 +24,13 @@
                 <div>
                     <a class="btn btn-primary" asp-controller="Question" asp-action="Details"
                        asp-route-id="@question.Id" style="height:2.5rem">View</a>
-                    <a class="btn btn-danger" style="height:2.5rem"
-                       asp-controller="Question" asp-action="Delete" asp-route-id="@question.Id">
-                        Delete
-                    </a>
+                    @if ((await UserManager.GetRolesAsync(await UserManager.FindByNameAsync(User.Identity.Name))).Contains("Admin"))
+                    {
+                        <a class="btn btn-danger" style="height:2.5rem"
+                           asp-controller="Question" asp-action="Delete" asp-route-id="@question.Id">
+                            Delete
+                        </a>
+                    }
                 </div>
             </div>
             <h6 class="card-subtitle mb-2 text-body-secondary">Answers: @Html.DisplayFor(_=>question.AnswersList.Count)</h6>

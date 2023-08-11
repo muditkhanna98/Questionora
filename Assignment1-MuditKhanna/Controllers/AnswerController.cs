@@ -1,18 +1,21 @@
 ﻿using Assignment1_MuditKhanna.Data;
 using Assignment1_MuditKhanna.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Assignment1_MuditKhanna.Controllers
 {
+    [Authorize]
     public class AnswerController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private UserManager<IdentityUser> userManager;
 
-        public AnswerController(ApplicationDbContext context)
+        public AnswerController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             this._context = context;
+            this.userManager = userManager;
         }
 
         public IActionResult Index()
@@ -30,7 +33,8 @@ namespace Assignment1_MuditKhanna.Controllers
         [HttpPost]
         public IActionResult Add(AnswerModel answerModel)
         {
-            answerModel.Author = "Anonymous";
+            IdentityUser user = userManager.GetUserAsync(User).Result;
+            answerModel.Author = user.Email;
             _context.Answers.Add(answerModel);
             _context.SaveChanges();
             QuestionModel question = _context.Questions.Find(answerModel.QuestionModelId);

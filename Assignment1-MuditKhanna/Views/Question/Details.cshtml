@@ -1,4 +1,6 @@
-﻿@model Assignment1_MuditKhanna.Models.QuestionModel
+﻿@using Microsoft.AspNetCore.Identity;
+@model Assignment1_MuditKhanna.Models.QuestionModel
+@inject UserManager<IdentityUser> UserManager
 
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -33,10 +35,16 @@
                         @Html.DisplayFor(_=>answer.AnswerValue)
                     </p>
                     <div>
-                        <a asp-controller="Answer" asp-action="Edit" asp-route-id="@answer.Id" asp-route-quesId="@Model.Id"
-                           class="btn btn-primary">Edit</a>
-                        <a asp-controller="Answer" asp-action="Delete" asp-route-id="@answer.Id" asp-route-quesId="@Model.Id" 
-                           class="btn btn-danger">Delete</a>
+                        @if ((await UserManager.GetRolesAsync(await UserManager.FindByNameAsync(User.Identity.Name))).Contains("Admin"))
+                        {
+                            <a asp-controller="Answer" asp-action="Edit" asp-route-id="@answer.Id" asp-route-quesId="@Model.Id"
+                               class="btn btn-primary">Edit</a>
+                        }
+                        @if ((await UserManager.GetRolesAsync(await UserManager.FindByNameAsync(User.Identity.Name))).Contains("Admin"))
+                        {
+                            <a asp-controller="Answer" asp-action="Delete" asp-route-id="@answer.Id" asp-route-quesId="@Model.Id"
+                               class="btn btn-danger">Delete</a>
+                        }
                     </div>
                 </div>
                 <h6>- @Html.DisplayFor(_=>answer.Author)</h6>

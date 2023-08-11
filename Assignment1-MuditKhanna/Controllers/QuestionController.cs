@@ -1,5 +1,6 @@
 ﻿using Assignment1_MuditKhanna.Data;
 using Assignment1_MuditKhanna.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +21,14 @@ namespace Assignment1_MuditKhanna.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Questions()
         {
             ViewBag.categoryNames = new SelectList(DataHelper.categories);
             return View(_context.Questions.Include(q => q.AnswersList).ToList());
         }
 
+        [Authorize]
         public IActionResult Add()
         {
             ViewBag.categoryNames = new SelectList(DataHelper.categories);
@@ -33,6 +36,7 @@ namespace Assignment1_MuditKhanna.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult PostQuestion(QuestionModel questionModel)
         {
             if (ModelState.IsValid)
@@ -47,6 +51,7 @@ namespace Assignment1_MuditKhanna.Controllers
             return View(questionModel);
         }
 
+        [Authorize]
         public IActionResult Details(int id)
         {
             QuestionModel questionForDetail = _context.Questions
@@ -55,6 +60,7 @@ namespace Assignment1_MuditKhanna.Controllers
             return View(questionForDetail);
         }
 
+        [Authorize]
         public IActionResult Delete(int id)
         {
             QuestionModel questionForDelete = _context.Questions.Find(id);
